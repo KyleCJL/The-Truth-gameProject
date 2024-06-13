@@ -1268,10 +1268,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TESTING TESTING TESTING
+  m_text: "\u55EF\uFF1F\u90A3\u6211\u770B\u770B\u3002"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24310658ac04c2a45b559ee140f1ae50, type: 2}
+  m_sharedMaterial: {fileID: -7498707065445941150, guid: 24310658ac04c2a45b559ee140f1ae50, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1955,8 +1955,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -568, y: -291}
-  m_SizeDelta: {x: 908.73, y: 1638.28}
+  m_AnchoredPosition: {x: -159, y: -111}
+  m_SizeDelta: {x: 1246.34, y: 1241.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1079173312
 MonoBehaviour:
@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 259565b0f84b3694c924490276385970, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6c8551d164c4524d9326107fdac23e3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2332,10 +2332,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NAME
+  m_text: "\u90D1\u8C2D"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24310658ac04c2a45b559ee140f1ae50, type: 2}
+  m_sharedMaterial: {fileID: -7498707065445941150, guid: 24310658ac04c2a45b559ee140f1ae50, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2359,8 +2359,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.33
-  m_fontSizeBase: 51.33
+  m_fontSize: 43.5
+  m_fontSizeBase: 43.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
