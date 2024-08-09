@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class TextArchitect
 {
@@ -24,7 +25,7 @@ public class TextArchitect
     private float baseSpeed = 1;
     private float speedMultiplier = 1;
 
-    public int characterPerCycle { get { return speed <= 2f ? characterMultiplier : speed <= 2.5f ? characterMultiplier * 2 : characterMultiplier * 3; } }
+    public int charactersPerCycle { get { return speed <= 2f ? characterMultiplier : speed <= 2.5f ? characterMultiplier * 2 : characterMultiplier * 3; } }
     private int characterMultiplier = 1;
 
     public bool hurryUp = false;
@@ -104,6 +105,7 @@ public class TextArchitect
                 tmpro.maxVisibleCharacters = tmpro.textInfo.characterCount;
                 break;
             case BuildMethod.fade:
+                tmpro.ForceMeshUpdate();
                 break;
         }
 
@@ -154,14 +156,51 @@ public class TextArchitect
 
     private void Prepare_Fade()
     {
-        
+        tmpro.text = preText;
+        if (preText != "")
+        {
+            tmpro.ForceMeshUpdate();
+            preTextLength = tmpro.textInfo.characterCount;
+        }else
+            preTextLength = 0;
+
+        tmpro.text += targetText;
+        tmpro.maxVisibleCharacters = int.MaxValue;
+        tmpro.ForceMeshUpdate();
+
+        TMP_TextInfo textInfo = tmpro.textInfo;
+
+        Color colorVisible = new Color(textColor.r, textColor.g, textColor.b, 1);
+        Color colorHidden = new Color(textColor.r, textColor.g, textColor.b, 0);
+
+        Color32[] VertexColors = textInfo.meshInfo[textInfo.characterInfo[0].materialReferenceIndex].colors32;
+
+        for (int i = 0; i < textInfo.characterCount; i++)
+        {
+            TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
+
+            if (!charInfo.isVisible)
+                continue;
+
+            if (i < preTextLength)
+            {
+                for (int v = 0; v < 4; v++)
+                    VertexColors[charInfo.vertexIndex + v] = colorVisible;
+            }else
+            {
+                for (int v = 0; v < 4; v++)
+                    VertexColors[charInfo.vertexIndex + v] = colorHidden;
+            }
+        }
+
+        tmpro.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
     }
 
     private IEnumerator Build_Typewriter()
     {
         while(tmpro.maxVisibleCharacters < tmpro.textInfo.characterCount)
         {
-            tmpro.maxVisibleCharacters += hurryUp ? characterPerCycle * 5 : characterPerCycle;
+            tmpro.maxVisibleCharacters += hurryUp ? charactersPerCycle * 5 : charactersPerCycle;
 
             yield return new WaitForSeconds(0.015f / speed);
         }
@@ -169,6 +208,49 @@ public class TextArchitect
 
     private IEnumerator Build_Fade()
     {
-        yield return null;
+        int minRange = preTextLength;
+        int maxRange = minRange + 1;
+
+        byte alphaThreshold = 15;
+
+        TMP_TextInfo textInfo = tmpro.textInfo;
+
+        Color32[] vertexColors = textInfo.meshInfo [textInfo.characterInfo[0].materialReferenceIndex].colors32;
+        float[] alphas = new float [textInfo.characterCount];
+
+        while(true)
+        {
+            float fadeSpeed = ((hurryUp ? charactersPerCycle * 5 : charactersPerCycle) * speed);
+
+            for(int i = minRange; i < maxRange; i++)
+            {
+                TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
+
+                if (!charInfo.isVisible)
+                    continue;
+                
+                int vertexIndex = textInfo.characterInfo[i].vertexIndex;
+                alphas[i] = Mathf.MoveTowards(alphas[i], 255, fadeSpeed);
+
+                for (int v = 0; v < 4; v++)
+                    vertexColors[charInfo.vertexIndex + v].a = (byte)alphas[i];
+
+                if (alphas[i] >= 255)
+                    minRange++;
+            }
+
+            tmpro.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+
+            bool lastCharacterIsInvisible = !textInfo.characterInfo[maxRange - 1].isVisible;
+            if (alphas [maxRange -1] > alphaThreshold || lastCharacterIsInvisible)
+            {
+                if (maxRange <textInfo.characterCount)
+                    maxRange++;
+                else if (alphas[maxRange - 1] >= 255 || lastCharacterIsInvisible)
+                    break;
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
